@@ -2,9 +2,13 @@ console.log('Add validation!');
 console.log(document.querySelector("#name").value);
 
 function validateAll(event) {
+    event.preventDefault();
     validateName();
     validateCarYMM();
     vali_Date();
+    validateDays();
+    validateCardNo();
+    validateCVV();
 }
 
 function makeValid(field) {
@@ -41,7 +45,7 @@ function validateCarYear() {
     if(year.value.length != 4)
         return 0;
     try {
-        if(year.value < 1900)
+        if(year.value < 1900 || year.value > 2020)
             return 0;
     } catch { return 0; }
 }
@@ -81,7 +85,10 @@ addListener("#car-model", validateCarYMM);
 
 function vali_Date() {//I'm a comedic genius.
     let d8 = document.querySelector("#start-date");
-    //look into date objects fren ~
+    let now = Date.now();
+    if(d8.valueAsNumber < now)
+        return makeInvalid(d8);
+    makeValid(d8);
 }
 
 addListener("#start-date", vali_Date);
@@ -92,3 +99,52 @@ function validateDays() {
         return makeInvalid(days);
     return makeValid(days);
 }
+
+addListener("#days", validateDays);
+
+function LuhnCheck(num) {
+    var sum = 0;
+    for(let n = 0; n < num.length; n++) {
+        let val = parseInt(num.substr(n, 1));
+        if(n % 2 === 0) {
+            val *= 2;
+            if(val > 9)
+                val = 1 + (val % 10);
+        }
+        sum += val;
+    }
+
+    return ((sum % 10) === 0);
+
+}
+
+function validateCardNo() {
+    var regex = new RegExp("^[0-9]{16}$");
+    var cardno = document.querySelector("#credit-card");
+    if(regex.test(cardno.value) && LuhnCheck(cardno.value))
+        return makeValid(cardno);
+    makeInvalid(cardno);
+}
+
+addListener("#credit-card", validateCardNo);
+
+function validateCVV() {
+    var cvv = document.querySelector("#cvv");
+    if(cvv.value.length < 3 || cvv.value.length > 4)
+        return makeInvalid(cvv);
+    makeValid(cvv);
+}
+
+addListener("#cvv", validateCVV);
+
+function validateExpiry() {
+    var regex = new RegExp("^[0-9]{2}\/[0-9]{2}$");
+    var expiry = document.querySelector("#expiration");
+    if(regex.test(expiry.value))
+        return makeValid(expiry);
+    makeInvalid(expiry);
+}
+
+addListener("#expiration", validateExpiry);
+
+addListener("#submit-button", validateAll());
