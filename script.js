@@ -2,13 +2,14 @@ console.log('Add validation!');
 console.log(document.querySelector("#name").value);
 
 function validateAll(event) {
-    event.preventDefault();
     validateName();
     validateCarYMM();
     vali_Date();
     validateDays();
     validateCardNo();
     validateCVV();
+    validateExpiry();
+    event.preventDefault();
 }
 
 function makeValid(field) {
@@ -147,4 +148,4 @@ function validateExpiry() {
 
 addListener("#expiration", validateExpiry);
 
-addListener("#submit-button", validateAll());
+document.querySelector("#submit-button").addEventListener("click", validateAll(), false);
