@@ -86,6 +86,8 @@ addListener("#car-model", validateCarYMM);
 
 function vali_Date() {//I'm a comedic genius.
     let d8 = document.querySelector("#start-date");
+    if(d8.value === "")
+        return makeInvalid(d8);
     let now = Date.now();
     if(d8.valueAsNumber < now)
         return makeInvalid(d8);
