@@ -26,7 +26,7 @@ function validateAll(event) {
             if(dow > 6)
                 dow = 0;
         }
-        console.log(price);
+        document.querySelector("#total").textContent = ("Total: $" + price + ".00");
     }
 
 }
