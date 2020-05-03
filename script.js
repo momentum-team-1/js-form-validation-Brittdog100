@@ -40,6 +40,7 @@ function testValidity(id) {
 
 function makeValid(field) {
     field.parentElement.classList.add("input-valid");
+
     return 1;
 }
 
@@ -132,7 +133,7 @@ function validateDays() {
 addListener("#days", validateDays);
 
 function LuhnCheck(num) {
-    var sum = 0;
+    let sum = 0;
     for(let n = 0; n < num.length; n++) {
         let val = parseInt(num.substr(n, 1));
         if(n % 2 === 0) {
@@ -148,8 +149,8 @@ function LuhnCheck(num) {
 }
 
 function validateCardNo() {
-    var regex = new RegExp("^[0-9]{16}$");
-    var cardno = document.querySelector("#credit-card");
+    let regex = new RegExp("^[0-9]{16}$");
+    let cardno = document.querySelector("#credit-card");
     if(regex.test(cardno.value) && LuhnCheck(cardno.value))
         return makeValid(cardno);
     makeInvalid(cardno);
@@ -158,7 +159,7 @@ function validateCardNo() {
 addListener("#credit-card", validateCardNo);
 
 function validateCVV() {
-    var cvv = document.querySelector("#cvv");
+    let cvv = document.querySelector("#cvv");
     if(cvv.value.length < 3 || cvv.value.length > 4)
         return makeInvalid(cvv);
     makeValid(cvv);
@@ -167,11 +168,18 @@ function validateCVV() {
 addListener("#cvv", validateCVV);
 
 function validateExpiry() {
-    var regex = new RegExp("^[0-9]{2}\/[0-9]{2}$");
-    var expiry = document.querySelector("#expiration");
-    if(regex.test(expiry.value))
-        return makeValid(expiry);
-    makeInvalid(expiry);
+    let regex = new RegExp("^[0-9]{2}\/[0-9]{2}$");
+    let expiry = document.querySelector("#expiration");
+    let expm = parseInt(expiry.value.substr(0,2));
+    let expy = parseInt(expiry.value.substr(3,2));
+    if(!regex.test(expiry.value))
+        return makeInvalid(expiry);
+    let currdate = new Date(Date.now());
+    let strexpy = currdate.getFullYear() % 100;
+    let isexpm = (expm - 1) <= new Date().getUTCMonth();
+    if((expy < strexpy) || (expy == strexpy && isexpm))
+        return makeInvalid(expiry);
+    makeValid(expiry);
 }
 
 addListener("#expiration", validateExpiry);
