@@ -2,6 +2,8 @@ console.log('Add validation!');
 console.log(document.querySelector("#name").value);
 
 function validateAll(event) {
+    event.preventDefault();
+
     validateName();
     validateCarYMM();
     vali_Date();
@@ -9,7 +11,31 @@ function validateAll(event) {
     validateCardNo();
     validateCVV();
     validateExpiry();
-    event.preventDefault();
+
+    if(testValidity("#start-date") && testValidity("#days")) {
+        //do price calc
+        let edate = new Date(document.querySelector("#start-date").valueAsNumber);
+        let dow = edate.getDay();
+        let price = 0;
+        for(let n = 0; n < document.querySelector("#days").value; n++) {
+            if(dow == 0 || dow == 6)
+                price += 7;
+            else
+                price += 5;
+            dow++;
+            if(dow > 6)
+                dow = 0;
+        }
+        console.log(price);
+    }
+
+}
+
+function testValidity(id) {
+    var tmp = document.querySelector(id).parentElement;
+    if(tmp.classList.contains("input-valid"))
+        return true;
+    return false;
 }
 
 function makeValid(field) {
@@ -150,4 +176,4 @@ function validateExpiry() {
 
 addListener("#expiration", validateExpiry);
 
-document.querySelector("#submit-button").addEventListener("click", validateAll(), false);
+document.querySelector("#submit-button").addEventListener("click", validateAll, false);
