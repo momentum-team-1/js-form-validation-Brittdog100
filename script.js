@@ -1,5 +1,3 @@
-console.log('Add validation!');
-console.log(document.querySelector("#name").value);
 
 function validateAll(event) {
     event.preventDefault();
@@ -39,12 +37,16 @@ function testValidity(id) {
 
 function makeValid(field) {
     field.parentElement.classList.add("input-valid");
-
+    let tmp = field.parentElement.getElementsByTagName("label");
+    tmp.textContent = tmp.textContent.replace("*"," ").trim();
     return 1;
 }
 
 function makeInvalid(field) {
     field.parentElement.classList.add("input-invalid");
+    let tmp = field.parentElement.getElementsByTagName("label")[0];
+    if(!tmp.textContent.endsWith("*"))
+        tmp.textContent += "*";
     return 0;
 }
 
@@ -92,18 +94,18 @@ function validateCarModel() {
 function validateCarYMM(event) {
     let year = validateCarYear();
     if(event === undefined || (year === 0 && event.target.id === "car-year"))
-        return makeInvalid(document.querySelector("#car-year"));
+        return makeInvalid(document.querySelector("#car-year").parentElement);
     
     let make = validateCarMake();
     if(event === undefined || (make === 0 && event.target.id === "car-make"))
-        return makeInvalid(document.querySelector("#car-make"));
+        return makeInvalid(document.querySelector("#car-make").parentElement);
 
     let model = validateCarModel();
     if(event === undefined || (model === 0 && event.target.id === "car-model"))
-        return makeInvalid(document.querySelector("#car-model"));
+        return makeInvalid(document.querySelector("#car-model").parentElement);
 
     if(year === undefined && make === undefined && model === undefined)
-        return makeValid(document.querySelector("#car-year"));
+        return makeValid(document.querySelector("#car-year").parentElement);
 }
 
 addListener("#car-year", validateCarYMM);
