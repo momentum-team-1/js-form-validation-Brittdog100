@@ -13,7 +13,6 @@ function validateAll(event) {
     validateExpiry();
 
     if(testValidity("#start-date") && testValidity("#days")) {
-        //do price calc
         let edate = new Date(document.querySelector("#start-date").valueAsNumber);
         let dow = edate.getDay();
         let price = 0;
@@ -172,7 +171,7 @@ function validateExpiry() {
     let expiry = document.querySelector("#expiration");
     let expm = parseInt(expiry.value.substr(0,2));
     let expy = parseInt(expiry.value.substr(3,2));
-    if(!regex.test(expiry.value))
+    if(!regex.test(expiry.value) || expm > 12)
         return makeInvalid(expiry);
     let currdate = new Date(Date.now());
     let strexpy = currdate.getFullYear() % 100;
