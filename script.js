@@ -37,7 +37,7 @@ function testValidity(id) {
 
 function makeValid(field) {
     field.parentElement.classList.add("input-valid");
-    let tmp = field.parentElement.getElementsByTagName("label");
+    let tmp = field.parentElement.getElementsByTagName("label")[0];
     tmp.textContent = tmp.textContent.replace("*"," ").trim();
     return 1;
 }
